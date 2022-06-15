@@ -4,7 +4,7 @@
 #include "i2c_config.h"
 #include "esp_log.h"
 
-#define AHT20_TICKS_TO_WAIT           (100 / portTICK_RATE_MS)    // I2C读写的超时等待时间
+#define AHT20_TICKS_TO_WAIT           (100 / portTICK_PERIOD_MS)    // I2C读写的超时等待时间
 
 #define AHT20_SLAVE_ADDRESS           0x38    // AHT20在I2C总线上的从机器件地址
 

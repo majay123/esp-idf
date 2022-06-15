@@ -7,6 +7,7 @@
 #include "spi_lcd.h"
 #include "simple_gui.h"
 #include <string.h>
+#include "esp_timer.h"
 
 /**
  * @brief  初始化lcd使用`SPI-DMA 双缓冲环形队列`刷屏（申请DMA双缓冲内存）

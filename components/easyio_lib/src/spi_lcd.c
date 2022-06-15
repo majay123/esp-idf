@@ -145,9 +145,9 @@ static void lcd_ic_init(spi_device_handle_t spi)
 
     // RST引脚拉低，复位后重新拉高
     gpio_set_level(PIN_NUM_RST, 0);
-    vTaskDelay(100 / portTICK_RATE_MS);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
     gpio_set_level(PIN_NUM_RST, 1);
-    vTaskDelay(200 / portTICK_RATE_MS);
+    vTaskDelay(200 / portTICK_PERIOD_MS);
 
     /*// 检测LCD的驱动IC型号，以作驱动适配
     uint32_t lcd_id = lcd_get_id(spi);
@@ -205,7 +205,7 @@ static void lcd_ic_init(spi_device_handle_t spi)
         lcd_cmd(spi, lcd_init_cmds[cmd].cmd);
         lcd_data(spi, lcd_init_cmds[cmd].data, lcd_init_cmds[cmd].databytes&0x1F);
         if (lcd_init_cmds[cmd].databytes&0x80) {
-            vTaskDelay(10 / portTICK_RATE_MS);
+            vTaskDelay(10 / portTICK_PERIOD_MS);
         }
         cmd++;
     }
@@ -269,7 +269,7 @@ void spi_lcd_init(spi_host_device_t host_id, uint32_t clk_speed, gpio_num_t cs_i
 
     // 清屏，使用纯黑，避免之后点亮背光产生突兀的闪烁
     LCD_Clear(BLACK);
-    vTaskDelay(20 / portTICK_RATE_MS);
+    vTaskDelay(20 / portTICK_PERIOD_MS);
 
     // 点亮背光
     gpio_set_level(PIN_NUM_BCKL, 1);

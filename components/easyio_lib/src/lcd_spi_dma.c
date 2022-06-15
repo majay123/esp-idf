@@ -38,7 +38,7 @@ static inline uint16_t get_bgnd_pixel(uint16_t **pixels, int x, int y)
 {
     return pixels[y][x];
 }
-static void load_img_line(uint16_t *pixels, uint16_t *dest, int line, int linect)
+static void load_img_line(uint16_t **pixels, uint16_t *dest, int line, int linect)
 {
     for (int y=line; y<line+linect; y++) {
         for (int x=0; x<320; x++) {
@@ -165,7 +165,7 @@ static int8_t xcomp[320], ycomp[240];
 // 计算一组线的像素数据（每条线大小为320），输入的静态图像输出动态波动图
 // dest 是输入的像素数据。line是要计算的第一行的Y坐标。linect是要计算的行数
 // 每次显示整个图像时，帧会增加一格； 这用于转到动画的下一帧。
-static void pretty_effect_calc_lines(uint16_t *pixels, uint16_t *dest, int line, int frame, int linect)
+static void pretty_effect_calc_lines(uint16_t **pixels, uint16_t *dest, int line, int frame, int linect)
 {
     if (frame!=prev_frame) {
         // 我们需要计算一组新的偏移系数。 以一些随机的正弦作为偏移量，以使所有内容看起来既漂亮又流畅。

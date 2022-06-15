@@ -9,6 +9,7 @@
 #include "mbedtls/aes.h"
 #include "mbedtls/md5.h"
 #include "mbedtls/base64.h"
+#include "mbedtls/md.h"
 
 
 // tls加密调试信息输出开关，通过串口调试输出 tls加密信息（0关闭，1开启）

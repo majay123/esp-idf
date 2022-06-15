@@ -2,6 +2,9 @@
 #define __PULSE_CNT_H__
 
 #include "driver/pcnt.h"
+#include "esp_attr.h"
+#include "esp_bit_defs.h"
+#include "soc/pcnt_struct.h"
 
 //观察点的 最大计数值 和 最小计数值（当PULSE_CNT 计数到最大最小值时，ESP32硬件会自动清零PULSE_CNT，所以这两个值决定了PCNT的计数范围）
 #define PCNT_H_LIM_VAL      30000     //PCNT_H_LIM_VAL应设为正数。为了不频繁进入中断，此值应在int16_t的范围内设置的尽可能大

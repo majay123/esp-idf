@@ -70,17 +70,25 @@ void mcpwm_servo_init(servo_unit_t servo_unit_num, uint16_t frequency, int PWMxA
  */
 void mcpwm_servo_sync(servo_unit_t servo_unit_num, mcpwm_sync_signal_t sync_sig, uint32_t phase_val, int sync_gpio_num)
 {
+    mcpwm_sync_config_t sync_conf = {
+        .sync_sig = sync_sig,
+        .timer_val = phase_val,
+        .count_direction = MCPWM_TIMER_DIRECTION_UP,
+    };
+
     if(servo_unit_num<3) {
         //用内部信号做同步的方法未找到。必须占用一个外部引脚，而且为了避免输入干扰信号，需要配置为下拉
         //同步信号的GPIO要连接 信号，一般为第一个Motor的输出，不能空置，否则复位后会导致不能同步
         mcpwm_gpio_init(SERVO_0_5_MCPWM, sync_sig+2, sync_gpio_num);   //SYNCx
         gpio_pulldown_en(sync_gpio_num);   //Enable pull down on SYNC0  signal
         //使能同步，TIMER_x与MCPWM_SELECT_SYNCx信号同步
-        mcpwm_sync_enable(SERVO_0_5_MCPWM, servo_unit_num%3, sync_sig, phase_val);
+        mcpwm_sync_configure(SERVO_0_5_MCPWM, servo_unit_num%3, &sync_conf);
+        // mcpwm_sync_enable(SERVO_0_5_MCPWM, servo_unit_num%3, sync_sig, phase_val);
     }else{
         mcpwm_gpio_init(SERVO_6_11_MCPWM, sync_sig+2, sync_gpio_num);   //SYNCx
         gpio_pulldown_en(sync_gpio_num);   //Enable pull down on SYNC0  signal
-        mcpwm_sync_enable(SERVO_6_11_MCPWM, servo_unit_num%3, sync_sig, phase_val);
+        mcpwm_sync_configure(SERVO_6_11_MCPWM, servo_unit_num%3, &sync_conf);
+        // mcpwm_sync_enable(SERVO_6_11_MCPWM, servo_unit_num%3, sync_sig, phase_val);
     }
 }
 

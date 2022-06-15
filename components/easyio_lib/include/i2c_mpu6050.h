@@ -4,7 +4,7 @@
 #include "i2c_config.h"
 #include "esp_log.h"
 
-#define MPU6050_TICKS_TO_WAIT           (100 / portTICK_RATE_MS)    // I2C读写的超时等待时间
+#define MPU6050_TICKS_TO_WAIT           (100 / portTICK_PERIOD_MS)    // I2C读写的超时等待时间
 
 #define MPU6050_SLAVE_ADDRESS           0x68    // MPU6050在I2C总线上的从机器件地址
 

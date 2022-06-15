@@ -5,7 +5,7 @@
 #include "esp_log.h"
 
 // 敦泰的触摸控制IC，型号包括：FT5206、FT5336、FT5436、FT6206、FT6236，驱动几乎都是一样（区别是触摸点数、刷新率不同）
-#define CTP_FTxxxx_TICKS_TO_WAIT       (10 / portTICK_RATE_MS)    // I2C读写的超时等待时间
+#define CTP_FTxxxx_TICKS_TO_WAIT       (10 / portTICK_PERIOD_MS)    // I2C读写的超时等待时间
 
 #define CTP_FTxxxx_SLAVE_ADDRESS       0x38    // FTxxxx在I2C总线上的从机器件地址(敦泰的触摸控制IC，型号包括：FT5206、FT5336、FT5436、FT6206、FT6236)
 

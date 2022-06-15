@@ -81,7 +81,7 @@ static uint16_t as5047p_cmd_frame_and_read(spi_device_handle_t spi, uint16_t add
 
     // 置读写标志位，置PARC偶校验位
     addr |= 0x4000;                 // 读写标志位，置1，表示读
-    even = soc_gen_even_parity_common(&addr, 16); // PARC偶校验
+    even = soc_gen_even_parity_common((uint8_t *)&addr, 16); // PARC偶校验
     addr = addr | (even << 15);
 
     // 开始SPI通信，接收同时读取的数据
@@ -90,7 +90,7 @@ static uint16_t as5047p_cmd_frame_and_read(spi_device_handle_t spi, uint16_t add
 
     // 重新偶校验，如校验错误返回 0xFFFF。 如校验正确，但因为错误标志位置高会导致数据>=16384
     // 调用该读数据的函数，可直接判断是否 >= 16384，来判断是否正确（<为正确，>=为错误）
-    even = soc_gen_even_parity_common(&data_e, 16); // PARC偶校验
+    even = soc_gen_even_parity_common((uint8_t *)&data_e, 16); // PARC偶校验
     // 如果校验错误，或者Bit14为1，则报错，返回值会 >= 16384
     if (even == (data>>15))
         return data_e;
@@ -176,7 +176,7 @@ void spi_as5047p_init(spi_host_device_t host_id, uint32_t clk_speed, gpio_num_t 
     ESP_ERROR_CHECK(ret);
 
     // 配置软件cs引脚
-    gpio_pad_select_gpio(cs_io_num);
+    esp_rom_gpio_pad_select_gpio(cs_io_num);
     /* Set the GPIO as a push/pull output */
     gpio_set_direction(cs_io_num, GPIO_MODE_OUTPUT);
     gpio_set_level(cs_io_num, 1);

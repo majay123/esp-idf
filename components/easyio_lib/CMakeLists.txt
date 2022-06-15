@@ -1,3 +1,7 @@
+idf_build_get_property(target IDF_TARGET)
+
+MESSAGE( STATUS "get target = ${target}")
+
 set(easyio_srcs
     "src/led.c"
     "src/gpioX.c"
@@ -48,15 +52,21 @@ set(easyio_srcs
     #"src/eth_connect.c"
     )
 
-if(EXISTS "${IDF_PATH}/components/driver/${target}/include")
-    list(APPEND includes "${target}/include")
-endif()
+# if(EXISTS "${IDF_PATH}/components/driver/${target}/include")
+#     MESSAGE( STATUS "this is exists ${IDF_PATH}/components/driver/${target}/include")
+#     list(APPEND includes "${target}/include")
+# endif()
 idf_component_register(SRCS "${easyio_srcs}"
                        INCLUDE_DIRS "include"
+                       "${IDF_PATH}/components/driver/${target}/include"
                        "${IDF_PATH}/components/driver/include/"
+                       "${IDF_PATH}/components/driver/deprecated/"
+                       "${IDF_PATH}/components/freertos/FreeRTOS-Kernel/include"
+                       "${IDF_PATH}/components/esp_hw_support/include"
                        "${IDF_PATH}/components/esp_adc_cal/include"
                        "${IDF_PATH}/components/console"
                        "${IDF_PATH}/components/spi_flash/include"
+                       "${IDF_PATH}/components/esp_timer/include"
                        "${IDF_PATH}/components/fatfs/vfs"
                        "${IDF_PATH}/components/fatfs/src"
                        "${IDF_PATH}/components/wear_levelling/include"
@@ -64,4 +74,9 @@ idf_component_register(SRCS "${easyio_srcs}"
                        "${IDF_PATH}/components/json/cJSON"
                        "${IDF_PATH}/components/mbedtls/mbedtls/include"
                        "${IDF_PATH}/components/nvs_flash/include"
-                       "${IDF_PATH}/examples/common_components/protocol_examples_common/include")
+                       "${IDF_PATH}/components/esp_ringbuf/include"
+                       "${IDF_PATH}/components/esp_common/include"
+                       "${IDF_PATH}/examples/common_components/protocol_examples_common/include"
+                    #    "${IDF_PATH}/components/openthread/openthread/third_party/mbedtls/repo/include"
+                    #    "${IDF_PATH}/components/openthread/openthread/include"
+                       "${IDF_PATH}/components/soc/${target}/include")

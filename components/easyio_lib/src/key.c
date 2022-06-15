@@ -86,7 +86,7 @@ void key_scan(int key_num, ...)
     //配置 key 物理端口
     for(int i=0; i<key_num; i++) {
         //配置KEY_GPIO引脚为上拉输入、双边沿中断、关联ISR中断处理服务函数 key_isr_handler
-        gpiox_set_intr_input(channels[i], GPIO_PULLUP_ENABLE, GPIO_PULLDOWN_DISABLE, GPIO_PIN_INTR_ANYEDGE, key_isr_handler);
+        gpiox_set_intr_input(channels[i], GPIO_PULLUP_ENABLE, GPIO_PULLDOWN_DISABLE, GPIO_INTR_ANYEDGE, key_isr_handler);
     }
     
     //通过下降沿、上升沿的间隔时间来消除按键抖动，并判断出是短按、长按

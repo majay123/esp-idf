@@ -29,7 +29,14 @@ static void capture_deal(mcpwm_unit_t mcpwm_num, mcpwm_capture_signal_t cap_sig,
         //记录历史值
         mcpwm_cap->pos_edge_val[channel] = current_cap_val;
         //翻转GPIO触发方式，改为下降沿触发
-        mcpwm_capture_enable(mcpwm_num, cap_sig, MCPWM_NEG_EDGE, 0);  //capture signal on negative edge
+        mcpwm_capture_config_t cap_config = {
+            .cap_edge = MCPWM_NEG_EDGE,
+            .cap_prescale = 0,
+            .capture_cb = NULL,
+            .user_data = NULL,
+        };
+        ESP_ERROR_CHECK(mcpwm_capture_enable_channel(mcpwm_num, cap_sig, &cap_config));
+        // mcpwm_capture_enable(mcpwm_num, cap_sig, MCPWM_NEG_EDGE, 0);  //capture signal on negative edge
     } else { //如果是下降沿，来计算占空比
         //求与上次上升沿间隔的时间（单位ns），来计算 单个脉宽内高电平的时间
         if(current_cap_val > mcpwm_cap->pos_edge_val[channel]) {
@@ -42,7 +49,14 @@ static void capture_deal(mcpwm_unit_t mcpwm_num, mcpwm_capture_signal_t cap_sig,
         //记录历史值
         mcpwm_cap->neg_edge_val[channel] = current_cap_val;
         //翻转GPIO触发方式，改为上升沿触发
-        mcpwm_capture_enable(mcpwm_num, cap_sig, MCPWM_POS_EDGE, 0);  //capture signal on rising edge
+        mcpwm_capture_config_t cap_config = {
+            .cap_edge = MCPWM_POS_EDGE,
+            .cap_prescale = 0,
+            .capture_cb = NULL,
+            .user_data = NULL,
+        };
+        ESP_ERROR_CHECK(mcpwm_capture_enable_channel(mcpwm_num, cap_sig, &cap_config));
+        // mcpwm_capture_enable(mcpwm_num, cap_sig, MCPWM_POS_EDGE, 0);  //capture signal on rising edge
     }
 }
 
@@ -113,24 +127,36 @@ void mcpwm_capture_duty_cycle_init(int ch_num, ...)
         channels[i] = va_arg(va,int); // get the next argument, the type is int
     }
     va_end(va);
+    mcpwm_capture_config_t cap_config = {
+        .cap_edge = MCPWM_NEG_EDGE,
+        .cap_prescale = 0,
+        .capture_cb = NULL,
+        .user_data = NULL,
+    };
 
     //配置 mcpwm输入捕获的GPIO
     if (ch_num<=3) {
         for(int i=0; i<ch_num; i++) {
             mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_0+i, channels[i]);
             gpio_pulldown_en(channels[i]);    //Enable pull down on CAPx   signal
-            mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0+i, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+            cap_config.cap_edge = MCPWM_POS_EDGE;
+            ESP_ERROR_CHECK(mcpwm_capture_enable_channel(MCPWM_UNIT_0, MCPWM_SELECT_CAP0+i, &cap_config));
+            // mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0+i, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
         }
     } else {
         for(int i=0; i<3; i++) {
             mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM_CAP_0+i, channels[i]);
             gpio_pulldown_en(channels[i]);    //Enable pull down on CAPx   signal
-            mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0+i, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+            cap_config.cap_edge = MCPWM_POS_EDGE;
+            ESP_ERROR_CHECK(mcpwm_capture_enable_channel(MCPWM_UNIT_0, MCPWM_SELECT_CAP0+i, &cap_config));
+            // mcpwm_capture_enable(MCPWM_UNIT_0, MCPWM_SELECT_CAP0+i, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
         }
         for(int i=0; i<(ch_num-3); i++) {
             mcpwm_gpio_init(MCPWM_UNIT_1, MCPWM_CAP_0+i, channels[i+3]);
             gpio_pulldown_en(channels[i+3]);    //Enable pull down on CAPx   signal
-            mcpwm_capture_enable(MCPWM_UNIT_1, MCPWM_SELECT_CAP0+i, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
+            cap_config.cap_edge = MCPWM_POS_EDGE;
+            ESP_ERROR_CHECK(mcpwm_capture_enable_channel(MCPWM_UNIT_1, MCPWM_SELECT_CAP0+i, &cap_config));
+            // mcpwm_capture_enable(MCPWM_UNIT_1, MCPWM_SELECT_CAP0+i, MCPWM_POS_EDGE, 0);  //capture signal on rising edge, prescale = 0 i.e. 800,000,000 counts is equal to one second
         }
     }
 
@@ -159,6 +185,7 @@ void mcpwm_capture_duty_cycle_init(int ch_num, ...)
             break;
     }
 
+#if 0
     //注册中断处理函数
     if (ch_num<=3) {
         mcpwm_isr_register(MCPWM_UNIT_0, mcpwm0_capture_isr_handler, NULL, ESP_INTR_FLAG_IRAM, NULL);  //Set ISR Handler
@@ -166,6 +193,7 @@ void mcpwm_capture_duty_cycle_init(int ch_num, ...)
         mcpwm_isr_register(MCPWM_UNIT_0, mcpwm0_capture_isr_handler, NULL, ESP_INTR_FLAG_IRAM, NULL);  //Set ISR Handler
         mcpwm_isr_register(MCPWM_UNIT_1, mcpwm1_capture_isr_handler, NULL, ESP_INTR_FLAG_IRAM, NULL);  //Set ISR Handler
     }
+#endif
 
     cap_basic_val = 10000000000 / rtc_clk_apb_freq_get(); //这个值最后要乘捕获计数值，得到实际时间
 }

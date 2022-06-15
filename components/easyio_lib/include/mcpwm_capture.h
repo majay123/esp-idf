@@ -3,6 +3,7 @@
 
 #include "easyio_mcpwm_config.h"
 #include <stdarg.h>
+#include "esp_attr.h"
 
 #define CAP_CHANNEL_NUM     6   //输入捕获的通道数目
 

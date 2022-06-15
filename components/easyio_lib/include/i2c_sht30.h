@@ -6,7 +6,7 @@
 #include "i2c_config.h"
 #include "esp_log.h"
 
-#define SHT30_TICKS_TO_WAIT           (100 / portTICK_RATE_MS)    // I2C读写的超时等待时间
+#define SHT30_TICKS_TO_WAIT           (100 / portTICK_PERIOD_MS)    // I2C读写的超时等待时间
 
 #define SHT30_I2C_BUS                 I2C_NUM_0 // SHT30所在的I2C总线
 

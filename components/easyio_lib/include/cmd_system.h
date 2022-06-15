@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+#include "esp_chip_info.h"
+
 // Register system functions
 void register_system(void);
 

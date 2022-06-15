@@ -94,17 +94,25 @@ void mcpwm_half_bridge_init(half_bridge_t half_bridge_num, uint16_t frequency, o
  */
 void mcpwm_half_bridge_sync(half_bridge_t half_bridge_num, mcpwm_sync_signal_t sync_sig, uint32_t phase_val, int sync_gpio_num)
 {
+    mcpwm_sync_config_t sync_conf = {
+        .sync_sig = sync_sig,
+        .timer_val = phase_val,
+        .count_direction = MCPWM_TIMER_DIRECTION_UP,
+    };
+
     if(half_bridge_num<3) {
         //用内部信号做同步的方法未找到。必须占用一个外部引脚，而且为了避免输入干扰信号，需要配置为下拉
         //同步信号的GPIO要连接 信号，一般为第一个half_bridge的输出，不能空置，否则复位后会导致不能同步
         mcpwm_gpio_init(HALF_BRIDGE_0_2_MCPWM, sync_sig+2, sync_gpio_num);   //SYNCx
         gpio_pulldown_en(sync_gpio_num);   //Enable pull down on SYNC0  signal
         //使能同步，TIMER_x与MCPWM_SELECT_SYNCx信号同步
-        mcpwm_sync_enable(HALF_BRIDGE_0_2_MCPWM, half_bridge_num%3, sync_sig, phase_val);
+        mcpwm_sync_configure(HALF_BRIDGE_0_2_MCPWM, half_bridge_num%3, &sync_conf);
+        // mcpwm_sync_enable(HALF_BRIDGE_0_2_MCPWM, half_bridge_num%3, sync_sig, phase_val);
     }else{
         mcpwm_gpio_init(HALF_BRIDGE_3_5_MCPWM, sync_sig+2, sync_gpio_num);   //SYNCx
         gpio_pulldown_en(sync_gpio_num);   //Enable pull down on SYNC0  signal
-        mcpwm_sync_enable(HALF_BRIDGE_3_5_MCPWM, half_bridge_num%3, sync_sig, phase_val);
+        mcpwm_sync_configure(HALF_BRIDGE_3_5_MCPWM, half_bridge_num%3, &sync_conf);
+        // mcpwm_sync_enable(HALF_BRIDGE_3_5_MCPWM, half_bridge_num%3, sync_sig, phase_val);
     }
 }
 
@@ -135,12 +143,19 @@ void mcpwm_half_bridge_output(half_bridge_t half_bridge_num, float PWMxA_duty, f
  */
 void mcpwm_half_bridge_change_phase(half_bridge_t half_bridge_num, mcpwm_sync_signal_t sync_sig, uint32_t phase_val)
 {
+    mcpwm_sync_config_t sync_conf = {
+        .sync_sig = sync_sig,
+        .timer_val = phase_val,
+        .count_direction = MCPWM_TIMER_DIRECTION_UP,
+    };
     if(half_bridge_num<3) {
         //mcpwm_timer_change_phase(HALF_BRIDGE_0_2_MCPWM, half_bridge_num%3, uint32_t phase_val);
-        mcpwm_sync_enable(HALF_BRIDGE_0_2_MCPWM, half_bridge_num%3, sync_sig, phase_val);
+        mcpwm_sync_configure(HALF_BRIDGE_0_2_MCPWM, half_bridge_num%3, &sync_conf);
+        // mcpwm_sync_enable(HALF_BRIDGE_0_2_MCPWM, half_bridge_num%3, sync_sig, phase_val);
     }else{
         //mcpwm_timer_change_phase(HALF_BRIDGE_3_5_MCPWM, half_bridge_num%3, uint32_t phase_val);
-        mcpwm_sync_enable(HALF_BRIDGE_3_5_MCPWM, half_bridge_num%3, sync_sig, phase_val);
+        mcpwm_sync_configure(HALF_BRIDGE_3_5_MCPWM, half_bridge_num%3, &sync_conf);
+        // mcpwm_sync_enable(HALF_BRIDGE_3_5_MCPWM, half_bridge_num%3, sync_sig, phase_val);
     }
 }
 

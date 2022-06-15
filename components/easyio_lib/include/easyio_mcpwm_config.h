@@ -4,6 +4,7 @@
 #include "driver/mcpwm.h"
 #include "soc/mcpwm_periph.h"
 #include "soc/rtc.h"
+#include "esp_attr.h"
 
 //MCPWM的信号可映射到任意GPIO输出管脚
 //0-19, 21-23, 25-27, 32-39。GPIO 34-39 仅用作输入管脚

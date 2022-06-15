@@ -6,7 +6,7 @@
 
 // 驱动代码移植参照，特此感谢：https://blog.csdn.net/weixin_41756255/article/details/84996464
 
-#define PCF8563_TICKS_TO_WAIT           (100 / portTICK_RATE_MS)    // I2C读写的超时等待时间
+#define PCF8563_TICKS_TO_WAIT           (100 / portTICK_PERIOD_MS)    // I2C读写的超时等待时间
 
 #define PCF8563_I2C_BUS                 I2C_NUM_0 // PCF8563所在的I2C总线
 

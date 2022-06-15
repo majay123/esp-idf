@@ -176,7 +176,7 @@ struct ir_parser_s {
     *      - ESP_ERR_INVALID_ARG: Get scan code failed because of invalid arguments
     *      - ESP_FAIL: Get scan code failed because some error occurred
     */
-    esp_err_t (*get_scan_code)(ir_parser_t *parser, uint32_t *address, uint32_t *command, bool *repeat);
+    esp_err_t (*get_scan_code)(ir_parser_t *parser, uint32_t *address, uint32_t *command, _Bool *repeat);
 
     /**
     * @brief Free resources used by IR parser

@@ -14,13 +14,13 @@
 void led_init(gpio_num_t led_io_num, uint32_t level)
 {
     /*// 没有用这种简便的方法，是因为不能在GPIO输出时，获取该引脚电平值。导致不能实现 led_blink
-    gpio_pad_select_gpio(led_io_num);
+    esp_rom_gpio_pad_select_gpio(led_io_num);
     gpio_set_direction(led_io_num, GPIO_MODE_OUTPUT);
     led_set(led_io_num, level);*/
 
     gpio_config_t io_conf;
     //IO中断类型：禁止中断
-    io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
+    io_conf.intr_type = GPIO_INTR_DISABLE;
     //IO模式：输入输出
     io_conf.mode = GPIO_MODE_INPUT_OUTPUT;
     //bit mask of the pins that you want to set,e.g.GPIO18/19 配置GPIO_OUT寄存器

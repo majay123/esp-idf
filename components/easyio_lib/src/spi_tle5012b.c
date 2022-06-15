@@ -222,7 +222,7 @@ void spi_tle5012b_init(spi_host_device_t host_id, uint32_t clk_speed, gpio_num_t
     ESP_ERROR_CHECK(ret);
 
     // 配置软件cs引脚
-    gpio_pad_select_gpio(cs_io_num);
+    esp_rom_gpio_pad_select_gpio(cs_io_num);
     /* Set the GPIO as a push/pull output */
     gpio_set_direction(cs_io_num, GPIO_MODE_OUTPUT);
     gpio_set_level(cs_io_num, 1);

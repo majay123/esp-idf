@@ -40,12 +40,14 @@ int hmac_sha_base64_encrypt(mbedtls_md_type_t md_type, uint8_t *plain, uint8_t *
     #if tlsEncrypt_Dlog
     // 16进制字符串显示
     switch (md_type) {
+    #if 0
         case MBEDTLS_MD_MD2:
             ESP_LOGI(TAG, "HMAC-MD2: ");
             break;
         case MBEDTLS_MD_MD4:
             ESP_LOGI(TAG, "HMAC-MD4: ");
             break;
+    #endif
         case MBEDTLS_MD_MD5:
             ESP_LOGI(TAG, "HMAC-MD5: ");
             break;

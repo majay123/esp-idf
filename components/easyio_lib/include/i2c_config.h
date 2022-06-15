@@ -50,7 +50,7 @@ esp_err_t i2c_slave_init(i2c_port_t i2c_num, uint8_t slave_addr, gpio_num_t scl_
 /**
  * @brief  I2Cx-读从设备的值
  *      - 不带有读器件寄存器的方式，适用于 BH1750、ADS1115/1118等少数I2C设备，这类设备通常内部寄存器很少
- *      - 例：i2c_master_read_slave(I2C_NUM_0, 0x68, &test, 1, 100 / portTICK_RATE_MS);
+ *      - 例：i2c_master_read_slave(I2C_NUM_0, 0x68, &test, 1, 100 / portTICK_PERIOD_MS);
  *
  * ________________________________________________________________________________________
  * | start | slave_addr + rd_bit + ack | read n-1 bytes + ack | read 1 byte + nack | stop |
@@ -62,7 +62,7 @@ esp_err_t i2c_master_read_slave(i2c_port_t i2c_num, uint8_t slave_addr, uint8_t 
 /**
  * @brief  I2Cx-读从设备的寄存器值
  *      - 带有读器件寄存器的方式，适用于 MPU6050、ADXL345、HMC5983、MS5611、BMP280等绝大多数I2C设备
- *      - 例：i2c_master_read_slave_reg(I2C_NUM_0, 0x68, 0x75, &test, 1, 100 / portTICK_RATE_MS);
+ *      - 例：i2c_master_read_slave_reg(I2C_NUM_0, 0x68, 0x75, &test, 1, 100 / portTICK_PERIOD_MS);
  * 
  * _____________________________________________________________________________________________________________________________________________
  * | start | slave_addr + rd_bit + ack | reg_addr + ack | start | slave_addr + wr_bit + ack | read n-1 bytes + ack | read 1 byte + nack | stop |
@@ -83,7 +83,7 @@ esp_err_t i2c_master_read_slave_reg(i2c_port_t i2c_num, uint8_t slave_addr, uint
 /**
  * @brief  I2Cx-读从设备的寄存器值（寄存器地址 或 命令 为2字节的器件）
  *      - 带有读器件寄存器的方式，适用于 SHT20、GT911 这种寄存器地址为16位的I2C设备
- *      - 例：i2c_master_read_slave_reg_16bit(I2C_NUM_0, 0x44, 0xE000, &test, 6, 100 / portTICK_RATE_MS);
+ *      - 例：i2c_master_read_slave_reg_16bit(I2C_NUM_0, 0x44, 0xE000, &test, 6, 100 / portTICK_PERIOD_MS);
  * 
  * _____________________________________________________________________________________________________________________________________________
  * | start | slave_addr + rd_bit + ack | reg_addr(2byte) + ack | start | slave_addr + wr_bit + ack | read n-1 bytes + ack | read 1 byte + nack | stop |
@@ -104,7 +104,7 @@ esp_err_t i2c_master_read_slave_reg_16bit(i2c_port_t i2c_num, uint8_t slave_addr
 /**
  * @brief  I2Cx-写从设备的值
  *      - 不带有写器件寄存器的方式，适用于 BH1750、ADS1115/1118等少数I2C设备，这类设备通常内部寄存器很少
- *      - 例：i2c_master_write_slave(I2C_NUM_0, 0x68, &test, 1, 100 / portTICK_RATE_MS);
+ *      - 例：i2c_master_write_slave(I2C_NUM_0, 0x68, &test, 1, 100 / portTICK_PERIOD_MS);
  *
  * ___________________________________________________________________
  * | start | slave_addr + wr_bit + ack | write n bytes + ack  | stop |
@@ -116,7 +116,7 @@ esp_err_t i2c_master_write_slave(i2c_port_t i2c_num, uint8_t slave_addr, uint8_t
 /**
  * @brief  I2Cx-写从设备的寄存器值
  *      - 带有写器件寄存器的方式，适用于 MPU6050、ADXL345、HMC5983、MS5611、BMP280等绝大多数I2C设备
- *      - 例：i2c_master_write_slave_reg(I2C_NUM_0, 0x68, 0x75, &test, 1, 100 / portTICK_RATE_MS);
+ *      - 例：i2c_master_write_slave_reg(I2C_NUM_0, 0x68, 0x75, &test, 1, 100 / portTICK_PERIOD_MS);
  * 
  * ____________________________________________________________________________________
  * | start | slave_addr + wr_bit + ack | reg_addr + ack | write n bytes + ack  | stop |

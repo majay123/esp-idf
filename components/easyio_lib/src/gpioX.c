@@ -13,7 +13,7 @@
  */
 void gpiox_set_ppOutput(uint32_t gpio_num, uint32_t level)
 {
-    gpio_pad_select_gpio(gpio_num);
+    esp_rom_gpio_pad_select_gpio(gpio_num);
     /* Set the GPIO as a push/pull output */
     gpio_set_direction(gpio_num, GPIO_MODE_OUTPUT);
     /* GPIO set output level */
@@ -35,7 +35,7 @@ void gpiox_set_input(uint32_t gpio_num, uint32_t pullup_en, uint32_t pulldown_en
 {
     gpio_config_t io_conf;
     //IO中断类型：禁止中断
-    io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
+    io_conf.intr_type = GPIO_INTR_DISABLE;
     //IO模式：输入
     io_conf.mode = GPIO_MODE_INPUT;
     //bit mask of the pins that you want to set,e.g.GPIO18/19 配置GPIO_OUT寄存器
